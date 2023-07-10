@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
-import { PageContainer } from "./Map.style";
+import { ButtonContainer, MapContainer, PageContainer } from "./Map.style";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
 
@@ -17,6 +17,7 @@ export const Map = () => {
     useState<MarkerPosition | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
 
+  // Function to add a new marker
   const handleAddMarker = () => {
     const id = String(Date.now());
     const newMarker: MarkerPosition = {
@@ -29,6 +30,7 @@ export const Map = () => {
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
   };
 
+  // Function to handle marker dragging
   const handleMarkerDrag = (event: google.maps.MapMouseEvent, id: string) => {
     if (event.latLng) {
       const lat = event.latLng.lat();
@@ -48,8 +50,8 @@ export const Map = () => {
     }
   };
 
+  // Function to handle saving the marker's location
   const handleSaveMarker = (marker: MarkerPosition) => {
-    // Handle saving the marker's location
     const itemsString = localStorage.getItem("items");
     const items = itemsString ? JSON.parse(itemsString) : [];
     const newMarker = { ...marker, draggable: false };
@@ -85,23 +87,24 @@ export const Map = () => {
     gestureHandling: "greedy",
   };
 
+  // Function to handle map load
   const handleMapLoad = (map: google.maps.Map) => {
     mapRef.current = map;
   };
 
   useEffect(() => {
+    // Load markers from localStorage on component mount
     const itemsString = localStorage.getItem("items");
     const items = itemsString ? JSON.parse(itemsString) : [];
-    console.log("items cica:", items);
     if (items && !markers.length) {
       setMarkers(items);
     }
   }, []);
 
   return (
-    <div>
-      <PageContainer>
-        <LoadScript googleMapsApiKey={apiKey}>
+    <PageContainer>
+      <LoadScript googleMapsApiKey={apiKey}>
+        <MapContainer>
           <GoogleMap
             mapContainerStyle={containerStyle}
             options={mapOptions}
@@ -121,15 +124,19 @@ export const Map = () => {
               />
             ))}
           </GoogleMap>
-        </LoadScript>
-      </PageContainer>
-      <button onClick={handleAddMarker}>Add Marker</button>
-      <button
-        onClick={() => handleSaveMarker(lastDraggedMarker as MarkerPosition)}
-        disabled={!lastDraggedMarker}
-      >
-        Save Last Dragged Marker
-      </button>
-    </div>
+          <ButtonContainer>
+            <button onClick={handleAddMarker}>Add Marker</button>
+            <button
+              onClick={() =>
+                handleSaveMarker(lastDraggedMarker as MarkerPosition)
+              }
+              disabled={!lastDraggedMarker}
+            >
+              Save Last Dragged Marker
+            </button>
+          </ButtonContainer>
+        </MapContainer>
+      </LoadScript>
+    </PageContainer>
   );
 };
