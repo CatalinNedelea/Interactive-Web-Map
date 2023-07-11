@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+Interactive Web Map
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Just a small project to test out some concepts.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+Instructions:
 
-### `npm start`
+1. Clone the repository to your local machine:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   - Open a terminal or command prompt.
+   - Run the following command:
+     ```
+     git clone https://github.com/CatalinNedelea/Interactive-Web-Map.git
+     ```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. Install dependencies:
 
-### `npm test`
+   - Navigate to the project directory:
+     ```
+     cd <project-directory>
+     ```
+   - Run the following command to install dependencies:
+     ```
+     npm install
+     ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Start the application:
 
-### `npm run build`
+   - Run the following command to start the development server:
+     ```
+     npm start
+     ```
+   - Open your browser and visit http://localhost:3000 to view the application.
+   - You will see an interactive map.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Adding a Marker:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   - Click on the "Add Marker" button.
+   - This will add a draggable marker to the map.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. Saving a Marker:
 
-### `npm run eject`
+   - After dragging the marker to the desired location, click on the "Save Last Dragged Marker" button.
+   - This will save the marker's location permanently.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+6. Hiding/Unhiding Markers:
+   - You can hide or unhide the saved markers by checking or unchecking the "Hide Markers" checkbox.
+   - Hidden markers will not be displayed on the map.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Additional Information:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- The application uses Create React App for bootstrapping a React project.
+- The application relies on the following technologies: React, React Router, Styled Components, and the Google Maps API.
+- Feel free to explore and modify the application code to fit your needs.
+- For more information, refer to the project documentation and relevant resources.

@@ -3,10 +3,8 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Map } from "./components/Map/Map";
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
-
+// Render the App component into the root element of the HTML document
 ReactDOM.render(
   <React.StrictMode>
     <App />{" "}
@@ -14,4 +12,5 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
+// Report web vitals to the console
 reportWebVitals(console.log);
