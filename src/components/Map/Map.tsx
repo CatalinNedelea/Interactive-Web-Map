@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 import { ButtonContainer, MapContainer, PageContainer } from "./Map.style";
+import { containerStyle, mapOptions } from "src/constants";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
 
@@ -9,6 +10,7 @@ interface MarkerPosition {
   lat: number;
   lng: number;
   draggable: boolean;
+  visible: boolean;
 }
 
 export const Map = () => {
@@ -16,15 +18,18 @@ export const Map = () => {
   const [lastDraggedMarker, setLastDraggedMarker] =
     useState<MarkerPosition | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
+  const [hideMarkers, setHideMarkers] = useState(false);
 
   // Function to add a new marker
   const handleAddMarker = () => {
+    // Generate a unique id for the marker
     const id = String(Date.now());
     const newMarker: MarkerPosition = {
       id,
       lat: -25.344,
       lng: 131.031,
       draggable: true,
+      visible: true,
     };
 
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
@@ -37,6 +42,7 @@ export const Map = () => {
       const lng = event.latLng.lng();
 
       setMarkers((prevMarkers) => {
+        // Update the position of the dragged marker
         const updatedMarkers = prevMarkers.map((marker) =>
           marker.id === id ? { ...marker, lat, lng } : marker
         );
@@ -54,10 +60,20 @@ export const Map = () => {
   const handleSaveMarker = (marker: MarkerPosition) => {
     const itemsString = localStorage.getItem("items");
     const items = itemsString ? JSON.parse(itemsString) : [];
-    const newMarker = { ...marker, draggable: false };
-    if (!items.includes(newMarker)) {
+    const newMarker = { ...marker, draggable: false, visible: !hideMarkers };
+
+    // Check if the marker already exists in the items array
+    if (
+      !items.some(
+        (e: { [s: string]: unknown } | ArrayLike<unknown>) =>
+          Object.entries(e).toString() === Object.entries(newMarker).toString()
+      )
+    ) {
+      // Save the marker to localStorage
       localStorage.setItem("items", JSON.stringify([...items, newMarker]));
     }
+
+    // Update the state with the saved marker
     const newState = markers.map((obj) => {
       if (obj.id === newMarker.id) {
         return newMarker;
@@ -66,25 +82,18 @@ export const Map = () => {
     });
 
     setMarkers(newState);
-
-    console.log("Marker saved:", marker);
   };
 
-  const containerStyle = {
-    width: "100%",
-    height: "100%",
-  };
+  // Function to toggle markers visibility
+  const toggleMarkersVisibility = () => {
+    // Toggle the visibility state
+    setHideMarkers(!hideMarkers);
 
-  const center = {
-    lat: -25.344,
-    lng: 131.031,
-  };
-
-  const mapOptions = {
-    zoom: 4,
-    center,
-    mapId: "DEMO_MAP_ID",
-    gestureHandling: "greedy",
+    // Update the visibility of the markers based on the hideMarkers state
+    const newMarkers = markers.map((value) =>
+      value.draggable ? value : { ...value, visible: !value.visible }
+    );
+    setMarkers(newMarkers);
   };
 
   // Function to handle map load
@@ -111,17 +120,21 @@ export const Map = () => {
             onLoad={handleMapLoad}
           >
             {markers.map((marker) => (
-              <Marker
-                key={marker.id}
-                position={{ lat: marker.lat, lng: marker.lng }}
-                draggable={marker.draggable}
-                onDrag={(event) => handleMarkerDrag(event, marker.id)}
-                icon={{
-                  url: marker.draggable
-                    ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                    : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                }}
-              />
+              <>
+                {marker.visible ? (
+                  <Marker
+                    key={marker.id}
+                    position={{ lat: marker.lat, lng: marker.lng }}
+                    draggable={marker.draggable}
+                    onDrag={(event) => handleMarkerDrag(event, marker.id)}
+                    icon={{
+                      url: marker.draggable
+                        ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                        : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                    }}
+                  />
+                ) : null}
+              </>
             ))}
           </GoogleMap>
           <ButtonContainer>
@@ -130,10 +143,20 @@ export const Map = () => {
               onClick={() =>
                 handleSaveMarker(lastDraggedMarker as MarkerPosition)
               }
-              disabled={!lastDraggedMarker}
+              disabled={
+                !lastDraggedMarker || markers.every((value) => !value.draggable)
+              }
             >
               Save Last Dragged Marker
             </button>
+            <label>
+              <input
+                type="checkbox"
+                checked={hideMarkers}
+                onChange={toggleMarkersVisibility}
+              />
+              Hide Markers
+            </label>
           </ButtonContainer>
         </MapContainer>
       </LoadScript>

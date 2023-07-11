@@ -31,7 +31,7 @@ Instructions:
      ```
      npm start
      ```
-   - Open your browser and visit [http://localhost:3000](http://localhost:3000) to view the application.
+   - Open your browser and visit http://localhost:3000 to view the application.
    - You will see an interactive map.
 
 4. Adding a Marker:
@@ -40,14 +40,19 @@ Instructions:
    - This will add a draggable marker to the map.
 
 5. Saving a Marker:
+
    - After dragging the marker to the desired location, click on the "Save Last Dragged Marker" button.
    - This will save the marker's location permanently.
+
+6. Hiding/Unhiding Markers:
+   - You can hide or unhide the saved markers by checking or unchecking the "Hide Markers" checkbox.
+   - Hidden markers will not be displayed on the map.
 
 ---
 
 Additional Information:
 
-- The application uses [Create React App](https://create-react-app.dev) for bootstrapping a React project.
+- The application uses Create React App for bootstrapping a React project.
 - The application relies on the following technologies: React, React Router, Styled Components, and the Google Maps API.
 - Feel free to explore and modify the application code to fit your needs.
 - For more information, refer to the project documentation and relevant resources.
